@@ -1,15 +1,25 @@
 import arcade
+from math import sin, cos, pi
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 RADIUS = 10
-
+WIDTH_SQUARES = 50
+HEIGHT_SQUARES = 50
 
 class Ball:
     def __init__(self):
         self.r = RADIUS
         self.x = SCREEN_WIDTH / 2
         self.y = RADIUS / 2
+
+
+class Squares:
+    def __init__(self, x, y):
+        self.x =
+        self.y =
+        self.w = WIDTH_SQUARES
+        self.h = HEIGHT_SQUARES
 
 
 class MyGame(arcade.Window):
