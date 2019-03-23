@@ -20,6 +20,10 @@ class Platform:
                          self.x + self.width / 2, self.y,
                          self.color, 5)
 
+    def move_to(self, x):
+        if self.width / 2 < x < SCREEN_WIDTH - self.width / 2:
+            self.x = x
+
 class Ball:
     def __init__(self):
         self.r = RADIUS
@@ -58,6 +62,9 @@ class MyGame(arcade.Window):
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
         pass
+
+    def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
+        self.platform.move_to(x)
 
 
 def main():
