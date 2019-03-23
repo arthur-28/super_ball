@@ -25,6 +25,7 @@ class Platform:
         if self.width / 2 < x < SCREEN_WIDTH - self.width / 2:
             self.x = x
 
+
 class Ball:
     def __init__(self):
         self.r = RADIUS
@@ -59,7 +60,6 @@ class Squares:
 
 class MyGame(arcade.Window):
     """ Главный класс приложения. """
-
     def __init__(self, width, height):
         super().__init__(width, height)
         arcade.set_background_color(arcade.color.WHITE_SMOKE)
@@ -91,7 +91,6 @@ class MyGame(arcade.Window):
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         self.platform.move_to(x)
-
 
 
 def main():
