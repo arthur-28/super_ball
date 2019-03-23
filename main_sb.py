@@ -46,10 +46,15 @@ class Ball:
 
 class Squares:
     def __init__(self, x, y):
+        color_list = [arcade.color.BLUE, [125, 10, 200], [125, 10, 10]]
         self.x = x
         self.y = y
         self.w = WIDTH_SQUARES
         self.h = HEIGHT_SQUARES
+        self.color = random.choice(color_list)
+
+    def draw(self):
+        arcade.draw_rectangle_filled(self.x, self.y, self.w - 5, self.h - 5, self.color)
 
 
 class MyGame(arcade.Window):
@@ -58,12 +63,16 @@ class MyGame(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
         arcade.set_background_color(arcade.color.WHITE_SMOKE)
+        self.squares_list = []
 
     def setup(self):
         # Настроить игру здесь
         self.platform = Platform()
         self.ball = Ball()
         print(self.platform.width)
+        for i in range (16):
+            for j in range(3):
+                self.squares_list.append(Squares(i * 50 + 20, j * 25 + 537))
         pass
 
     def on_draw(self):
@@ -72,6 +81,8 @@ class MyGame(arcade.Window):
         # Здесь код рисунка
         self.platform.draw()
         self.ball.draw()
+        for square in self.squares_list:
+            square.draw()
 
 
     def update(self, delta_time):
@@ -80,6 +91,7 @@ class MyGame(arcade.Window):
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         self.platform.move_to(x)
+
 
 
 def main():
