@@ -1,4 +1,5 @@
 import arcade
+import random
 from math import sin, cos, pi
 
 SCREEN_WIDTH = 800
@@ -16,10 +17,15 @@ class Ball:
 
 class Squares:
     def __init__(self, x, y):
+        color_list = [arcade.color.BLUE, [125, 10, 200], [125, 10, 10]]
         self.x = x
         self.y = y
         self.w = WIDTH_SQUARES
         self.h = HEIGHT_SQUARES
+        self.color = random.choice(color_list)
+
+    def draw(self):
+        arcade.draw_rectangle_filled(self.x, self.y, self.w, self.h, self.color)
 
 
 class MyGame(arcade.Window):
@@ -41,6 +47,7 @@ class MyGame(arcade.Window):
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
         pass
+
 
 
 def main():
