@@ -16,8 +16,8 @@ class Ball:
 
 class Squares:
     def __init__(self, x, y):
-        self.x =
-        self.y =
+        self.x = x
+        self.y = y
         self.w = WIDTH_SQUARES
         self.h = HEIGHT_SQUARES
 
