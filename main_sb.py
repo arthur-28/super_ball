@@ -7,6 +7,21 @@ RADIUS = 10
 WIDTH_SQUARES = 50
 HEIGHT_SQUARES = 50
 
+
+class Platphorm:
+    def __init__(self):
+        self.x = SCREEN_WIDTH / 2
+        self.y = 10
+        self.width = 100
+        self.color = arcade.color.GREEN
+
+    def draw(self):
+        arcade.draw_line(self.x - self.width / 2, self.y,
+                         self.x + self.width / 2, self.y,
+                         self.color,
+                         5
+                         )
+
 class Ball:
     def __init__(self):
         self.r = RADIUS
