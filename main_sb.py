@@ -2,6 +2,14 @@ import arcade
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
+RADIUS = 10
+
+
+class Ball:
+    def __init__(self):
+        self.r = RADIUS
+        self.x = SCREEN_WIDTH / 2
+        self.y = RADIUS / 2
 
 
 class MyGame(arcade.Window):
