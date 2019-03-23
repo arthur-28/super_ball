@@ -1,3 +1,4 @@
+import random
 import arcade
 from math import sin, cos, pi
 
@@ -28,7 +29,19 @@ class Ball:
     def __init__(self):
         self.r = RADIUS
         self.x = SCREEN_WIDTH / 2
-        self.y = RADIUS / 2
+        self.y = RADIUS + 10
+        self.speed = 2
+        self.dir = 90
+        self.dx = cos(self.dir * pi / 180)
+        self.dy = sin(self.dir * pi / 180)
+        self.color = arcade.color.ROSE_RED
+
+    def move(self):
+        self.x += self.dx * self.speed
+        self.y += self.dy * self.speed
+
+    def draw(self):
+        arcade.draw_circle_filled(self.x, self.y, self.r, self.color)
 
 
 class Squares:
@@ -49,6 +62,7 @@ class MyGame(arcade.Window):
     def setup(self):
         # Настроить игру здесь
         self.platform = Platform()
+        self.ball = Ball()
         print(self.platform.width)
         pass
 
@@ -57,11 +71,12 @@ class MyGame(arcade.Window):
         arcade.start_render()
         # Здесь код рисунка
         self.platform.draw()
+        self.ball.draw()
 
 
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
-        pass
+        self.ball.move()
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         self.platform.move_to(x)
