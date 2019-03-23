@@ -8,7 +8,7 @@ WIDTH_SQUARES = 50
 HEIGHT_SQUARES = 50
 
 
-class Platphorm:
+class Platform:
     def __init__(self):
         self.x = SCREEN_WIDTH / 2
         self.y = 10
@@ -18,9 +18,7 @@ class Platphorm:
     def draw(self):
         arcade.draw_line(self.x - self.width / 2, self.y,
                          self.x + self.width / 2, self.y,
-                         self.color,
-                         5
-                         )
+                         self.color, 5)
 
 class Ball:
     def __init__(self):
@@ -46,12 +44,16 @@ class MyGame(arcade.Window):
 
     def setup(self):
         # Настроить игру здесь
+        self.platform = Platform()
+        print(self.platform.width)
         pass
 
     def on_draw(self):
         """ Отрендерить этот экран. """
         arcade.start_render()
         # Здесь код рисунка
+        self.platform.draw()
+
 
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
