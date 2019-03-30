@@ -52,11 +52,12 @@ class MyGame(arcade.Window):
         super().__init__(width, height)
         arcade.set_background_color(arcade.color.WHITE_SMOKE)
         self.squares_list = []
+        self.score = 0
 
     def setup(self):
         # Настроить игру здесь
         self.platform = Platform()
-        for i in range (16):
+        for i in range(16):
             for j in range(3):
                 self.squares_list.append(Squares(i * 50 + 20, j * 25 + 537))
         pass
