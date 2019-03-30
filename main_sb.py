@@ -25,21 +25,42 @@ class Platform:
         if self.width / 2 < x < SCREEN_WIDTH - self.width / 2:
             self.x = x
 
+    def ball_collision_update(self, ball):
+        if self.x - self.width /2 < ball.x < self.x + self.width / 2 and self.y + ball.r  >= ball.y:
+            ball.reflect_y()
+            ball.color = [random.randint(1, 255), random.randint(1, 255), random.randint(1, 255)]
+        if ball.y < 0:
+            return 'game_over'
 
 class Ball:
     def __init__(self):
         self.r = RADIUS
         self.x = SCREEN_WIDTH / 2
         self.y = RADIUS + 10
-        self.speed = 2
-        self.dir = 90
+        self.speed = 5
+        self.dir = 45
         self.dx = cos(self.dir * pi / 180)
         self.dy = sin(self.dir * pi / 180)
-        self.color = arcade.color.ROSE_RED
+        self.color = arcade.color.GRAY
 
     def move(self):
         self.x += self.dx * self.speed
         self.y += self.dy * self.speed
+        if not(self.r <= self.x <= SCREEN_WIDTH - self.r):
+            self.reflect_x()
+        if not (self.y <= SCREEN_HEIGHT - self.r):
+            self.reflect_y()
+
+    def reflect_x(self):
+        self.dx *= -1
+
+    def reflect_y(self):
+        self.dy *= -1
+
+    def set_dir(self, dir):
+        self.dir = dir
+        self.dx = cos(self.dir * pi / 180)
+        self.dy = sin(self.dir * pi / 180)
 
     def draw(self):
         arcade.draw_circle_filled(self.x, self.y, self.r, self.color)
@@ -65,6 +86,7 @@ class MyGame(arcade.Window):
         arcade.set_background_color(arcade.color.WHITE_SMOKE)
         self.squares_list = []
         self.score = 0
+        self.game_over = False
 
     def setup(self):
         # Настроить игру здесь
@@ -80,14 +102,19 @@ class MyGame(arcade.Window):
         """ Отрендерить этот экран. """
         arcade.start_render()
         # Здесь код рисунка
-        self.platform.draw()
-        for square in self.squares_list:
-            square.draw()
-
+        if not self.game_over:
+            self.platform.draw()
+            for square in self.squares_list:
+                square.draw()
+            self.ball.draw()
+        else:
+            arcade.draw_text('GAME OVER!!!', SCREEN_HEIGHT / 20, SCREEN_WIDTH / 3, [200, 0, 0], 100)
 
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
         self.ball.move()
+        if self.platform.ball_collision_update(self.ball) == 'game_over':
+            self.game_over = True
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         self.platform.move_to(x)
