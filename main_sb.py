@@ -37,7 +37,7 @@ class Ball:
         self.r = RADIUS
         self.x = SCREEN_WIDTH / 2
         self.y = RADIUS + 10
-        self.speed = 5
+        self.speed = 10
         self.dir = 45
         self.dx = cos(self.dir * pi / 180)
         self.dy = sin(self.dir * pi / 180)
@@ -78,6 +78,14 @@ class Squares:
     def draw(self):
         arcade.draw_rectangle_filled(self.x, self.y, self.w - 5, self.h - 5, self.color)
 
+    def is_collision(self, ball):
+        if (abs(ball.y - self.y) <= self.h / 2 + ball.r) and (abs(ball.x - self.x) <= self.w / 2 + ball.r):
+            self.color = [0, 222, 0]
+            return True
+        else:
+            self.color = [0, 0, 222]
+            return False
+
 
 class MyGame(arcade.Window):
     """ Главный класс приложения. """
@@ -113,6 +121,11 @@ class MyGame(arcade.Window):
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
         self.ball.move()
+        for brick in self.squares_list:
+            if brick.is_collision(self.ball):
+                self.ball.reflect_y()
+                self.squares_list.remove(brick)
+
         if self.platform.ball_collision_update(self.ball) == 'game_over':
             self.game_over = True
 
