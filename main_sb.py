@@ -7,6 +7,7 @@ SCREEN_HEIGHT = 600
 RADIUS = 10
 WIDTH_SQUARES = 50
 HEIGHT_SQUARES = 25
+ALPHA_MAX = 10
 
 bmp_background = arcade.load_texture('img/1 lvl.jpg')
 bmp_platform = arcade.load_texture('img/platform1.png')
@@ -36,6 +37,7 @@ class Platform:
     def ball_collision_update(self, ball):
         if self.x - self.width /2 < ball.x < self.x + self.width / 2 and self.y + ball.r  >= ball.y:
             ball.reflect_y()
+
         if ball.y < 0:
             return 'game_over'
 
@@ -44,8 +46,8 @@ class Ball:
         self.r = RADIUS
         self.x = SCREEN_WIDTH / 2
         self.y = RADIUS + 10
-        self.speed = 20
-        self.dir = 45
+        self.speed = 10
+        self.dir = 160
         self.dx = cos(self.dir * pi / 180)
         self.dy = sin(self.dir * pi / 180)
         self.color = arcade.color.GRAY
@@ -59,10 +61,14 @@ class Ball:
             self.reflect_y()
 
     def reflect_x(self):
-        self.dx *= -1
+        self.dir = 180 - self.dir
+        self.dx = cos(self.dir * pi / 180)
+        self.dy = sin(self.dir * pi / 180)
 
     def reflect_y(self):
-        self.dy *= -1
+        self.dir *= -1
+        self.dx = cos(self.dir * pi / 180)
+        self.dy = sin(self.dir * pi / 180)
 
     def set_dir(self, dir):
         self.dir = dir
