@@ -8,6 +8,8 @@ RADIUS = 10
 WIDTH_SQUARES = 50
 HEIGHT_SQUARES = 25
 
+bmp_background = arcade.load_texture('img/1 lvl.jpg')
+
 
 class Platform:
     def __init__(self):
@@ -20,6 +22,7 @@ class Platform:
         arcade.draw_line(self.x - self.width / 2, self.y,
                          self.x + self.width / 2, self.y,
                          self.color, 5)
+
 
     def move_to(self, x):
         if self.width / 2 < x < SCREEN_WIDTH - self.width / 2:
@@ -69,22 +72,19 @@ class Ball:
 
 class Squares:
     def __init__(self, x, y):
-        color_list = [arcade.color.BLUE, [125, 10, 200], [125, 10, 10]]
         self.x = x
         self.y = y
         self.w = WIDTH_SQUARES
         self.h = HEIGHT_SQUARES
-        self.color = random.choice(color_list)
+        self.color = [119, 253, 1]
 
     def draw(self):
         arcade.draw_rectangle_filled(self.x, self.y, self.w - 5, self.h - 5, self.color)
 
     def is_collision(self, ball):
         if (abs(ball.y - self.y) <= self.h / 2 + ball.r) and (abs(ball.x - self.x) <= self.w / 2 + ball.r):
-            self.color = [0, 222, 0]
             return True
         else:
-            self.color = [0, 0, 222]
             return False
 
 
@@ -111,6 +111,7 @@ class MyGame(arcade.Window):
         """ Отрендерить этот экран. """
         arcade.start_render()
         # Здесь код рисунка
+        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT// 2, SCREEN_WIDTH, SCREEN_HEIGHT, bmp_background)
         if not self.game_over:
             self.platform.draw()
             for square in self.squares_list:
