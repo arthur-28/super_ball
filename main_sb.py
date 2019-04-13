@@ -10,6 +10,7 @@ HEIGHT_SQUARES = 25
 
 bmp_background = arcade.load_texture('img/1 lvl.jpg')
 bmp_platform = arcade.load_texture('img/platform1.png')
+bmp_ball = arcade.load_texture('img/ball.png')
 
 
 class Platform:
@@ -43,7 +44,7 @@ class Ball:
         self.r = RADIUS
         self.x = SCREEN_WIDTH / 2
         self.y = RADIUS + 10
-        self.speed = 10
+        self.speed = 20
         self.dir = 45
         self.dx = cos(self.dir * pi / 180)
         self.dy = sin(self.dir * pi / 180)
@@ -70,6 +71,7 @@ class Ball:
 
     def draw(self):
         arcade.draw_circle_filled(self.x, self.y, self.r, self.color)
+        arcade.draw_texture_rectangle(self.x, self.y, self.r * 6, self.r * 6, bmp_ball)
 
 
 class Squares:
@@ -120,7 +122,7 @@ class MyGame(arcade.Window):
                 square.draw()
             self.ball.draw()
         else:
-            arcade.draw_text('GAME OVER!!!', SCREEN_HEIGHT / 20, SCREEN_WIDTH / 3, [200, 0, 0], 100)
+            arcade.draw_text('GAME OVER!!!', SCREEN_HEIGHT / 20, SCREEN_WIDTH / 3, [119, 253, 1], 100)
 
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
