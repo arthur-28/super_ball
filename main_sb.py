@@ -13,8 +13,8 @@ class Platform:
     def __init__(self):
         self.x = SCREEN_WIDTH / 2
         self.y = 10
-        self.width = 100
-        self.color = arcade.color.GREEN
+        self.width = 150
+        self.color = arcade.color.BLACK_LEATHER_JACKET
 
     def draw(self):
         arcade.draw_line(self.x - self.width / 2, self.y,
@@ -24,11 +24,12 @@ class Platform:
     def move_to(self, x):
         if self.width / 2 < x < SCREEN_WIDTH - self.width / 2:
             self.x = x
+        # if self.width / 2 < y < SCREEN_HEIGHT - self.width / 2:
+            pass
 
     def ball_collision_update(self, ball):
         if self.x - self.width /2 < ball.x < self.x + self.width / 2 and self.y + ball.r  >= ball.y:
             ball.reflect_y()
-            ball.color = [random.randint(1, 255), random.randint(1, 255), random.randint(1, 255)]
         if ball.y < 0:
             return 'game_over'
 
