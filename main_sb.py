@@ -14,14 +14,15 @@ class Platform:
     def __init__(self):
         self.x = SCREEN_WIDTH / 2
         self.y = 10
-        self.width = 150
+        self.width = 200
+        self.heigh = 200 / 4
         self.color = arcade.color.BLACK_LEATHER_JACKET
 
     def draw(self):
         arcade.draw_line(self.x - self.width / 2, self.y,
                          self.x + self.width / 2, self.y,
                          self.color, 5)
-        arcade.draw_texture_rectangle(self.x, self.y, self.width, 15, bmp_platform)
+        arcade.draw_texture_rectangle(self.x, self.y, self.width, self.heigh, bmp_platform)
 
     def move_to(self, x):
         if self.width / 2 < x < SCREEN_WIDTH - self.width / 2:
@@ -30,7 +31,7 @@ class Platform:
             pass
 
     def ball_collision_update(self, ball):
-        if self.x - self.width /2 < ball.x < self.x + self.width / 2 and self.y + ball.r  >= ball.y:
+        if self.x - self.width /2 < ball.x < self.x + self.width / 2 and self.y + self.heigh / 2  >= ball.y + ball.r:
             ball.reflect_y()
         if ball.y < 0:
             return 'game_over'
