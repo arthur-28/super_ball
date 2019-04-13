@@ -8,6 +8,7 @@ RADIUS = 10
 WIDTH_SQUARES = 50
 HEIGHT_SQUARES = 25
 
+bmp_platform = arcade.load_texture('img/platform1.png')
 
 class Platform:
     def __init__(self):
@@ -20,6 +21,7 @@ class Platform:
         arcade.draw_line(self.x - self.width / 2, self.y,
                          self.x + self.width / 2, self.y,
                          self.color, 5)
+        arcade.draw_texture_rectangle(self.x, self.y, self.width, 15, bmp_platform)
 
     def move_to(self, x):
         if self.width / 2 < x < SCREEN_WIDTH - self.width / 2:
