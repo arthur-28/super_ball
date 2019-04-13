@@ -9,19 +9,21 @@ WIDTH_SQUARES = 50
 HEIGHT_SQUARES = 25
 
 bmp_background = arcade.load_texture('img/1 lvl.jpg')
+bmp_platform = arcade.load_texture('img/platform1.png')
 
 
 class Platform:
     def __init__(self):
         self.x = SCREEN_WIDTH / 2
         self.y = 10
-        self.width = 150
+        self.width = 170
         self.color = arcade.color.BLACK_LEATHER_JACKET
 
     def draw(self):
         arcade.draw_line(self.x - self.width / 2, self.y,
                          self.x + self.width / 2, self.y,
                          self.color, 5)
+        arcade.draw_texture_rectangle(self.x, self.y, self.width, 30, bmp_platform)
 
 
     def move_to(self, x):
