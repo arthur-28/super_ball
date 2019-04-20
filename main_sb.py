@@ -100,7 +100,8 @@ class Squares:
         arcade.draw_rectangle_filled(self.x, self.y, self.w - 5, self.h - 5, self.color)
 
     def is_collision(self, ball):
-        if (abs(ball.y - self.y) <= self.h / 2 + ball.r) and (abs(ball.x - self.x) <= self.w / 2 + ball.r):
+        if (abs(ball.y - self.y) <= self.h / 2 + ball.r) \
+                and (abs(ball.x - self.x) <= self.w / 2 + ball.r):
             return True
         else:
             return False
@@ -125,11 +126,17 @@ class MyGame(arcade.Window):
                 self.squares_list.append(Squares(i * 50 + 20, j * 25 + 537))
         pass
 
+    def get_info(self):
+        st = 'Score: {}\n\n'.format(self.score) + \
+             'Bricks left: {}'.format(len(self.squares_list))
+        return st
+
     def on_draw(self):
         """ Отрендерить этот экран. """
         arcade.start_render()
         # Здесь код рисунка
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT// 2, SCREEN_WIDTH, SCREEN_HEIGHT, bmp_background)
+        arcade.draw_text(self.get_info(), 30, 30, [200, 0, 0], 18)
         if not self.game_over:
             self.platform.draw()
             for square in self.squares_list:
@@ -145,9 +152,14 @@ class MyGame(arcade.Window):
             if brick.is_collision(self.ball):
                 self.ball.reflect_y()
                 self.squares_list.remove(brick)
+                self.score += 1
+                break
 
         if self.platform.ball_collision_update(self.ball) == 'game_over':
             self.game_over = True
+
+        if self.score == 48:
+            arcade.draw_text('YOU WIN!!!', SCREEN_HEIGHT / 20, SCREEN_WIDTH / 3, [119, 253, 1], 100)
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         self.platform.move_to(x)
