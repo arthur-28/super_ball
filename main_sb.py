@@ -9,7 +9,7 @@ WIDTH_SQUARES = 50
 HEIGHT_SQUARES = 25
 MAX_A = 30
 
-bmp_background = arcade.load_texture('img/4 lvl.jpg')
+bmp_background = arcade.load_texture('img/1 lvl.jpg')
 bmp_platform = arcade.load_texture('img/platform1.png')
 bmp_ball = arcade.load_texture('img/ball.png')
 
@@ -34,12 +34,14 @@ class Platform:
             pass
 
     def ball_collision_update(self, ball):
-        if self.x - self.width / 2 < ball.x < self.x + self.width / 2 and self.y + ball.r >= ball.y:
+        if self.x - self.width * 0.5 < ball.x < self.x + self.width * 0.5 \
+                and self.y + ball.r > ball.y:
             dx = self.x - ball.x
             ball.reflect_y()
             # корректируем направление в зависимости от места столкновения с платформой
             dAlpha = MAX_A * dx / (self.width * 0.5)
             ball.correct_dir(dAlpha)
+            ball.y = self.y + ball.r
 
         if ball.y < 0:
             return 'game_over'
@@ -49,7 +51,7 @@ class Ball:
         self.r = RADIUS
         self.x = SCREEN_WIDTH / 2
         self.y = RADIUS + 10
-        self.speed = 10
+        self.speed = 12
         self.dir = 90
         self.dx = cos(self.dir * pi / 180)
         self.dy = sin(self.dir * pi / 180)
@@ -112,12 +114,17 @@ class MyGame(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
         arcade.set_background_color(arcade.color.WHITE_SMOKE)
+        self.set_mouse_visible(False)
         self.squares_list = []
-        self.score = 0
-        self.game_over = False
+
 
     def setup(self):
         # Настроить игру здесь
+        self.score = 0
+        self.game_over = False
+        #  'game_run', 'game_win', 'game_over'
+        self.game_state = 'game_run'
+
         self.platform = Platform()
         self.ball = Ball()
         print(self.platform.width)
@@ -127,39 +134,44 @@ class MyGame(arcade.Window):
         pass
 
     def get_info(self):
-        st = 'Score: {}\n\n'.format(self.score) + \
-             'Bricks left: {}'.format(len(self.squares_list))
+        st = 'Score: {}\n\n'.format(self.score)
         return st
 
     def on_draw(self):
         """ Отрендерить этот экран. """
         arcade.start_render()
         # Здесь код рисунка
-        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT// 2, SCREEN_WIDTH, SCREEN_HEIGHT, bmp_background)
+        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT,
+                                      bmp_background)
         arcade.draw_text(self.get_info(), 30, 30, [200, 0, 0], 18)
-        if not self.game_over:
-            self.platform.draw()
-            for square in self.squares_list:
-                square.draw()
-            self.ball.draw()
-        else:
+
+        self.platform.draw()
+        for square in self.squares_list:
+            square.draw()
+        self.ball.draw()
+
+        if self.game_state == 'game_win':
+            arcade.draw_text('YOU WIN!!!', SCREEN_HEIGHT / 20, SCREEN_WIDTH / 3, [119, 253, 1], 100)
+        elif self.game_state == 'game_over':
             arcade.draw_text('GAME OVER!!!', SCREEN_HEIGHT / 20, SCREEN_WIDTH / 3, [119, 253, 1], 100)
 
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
-        self.ball.move()
-        for brick in self.squares_list:
-            if brick.is_collision(self.ball):
-                self.ball.reflect_y()
-                self.squares_list.remove(brick)
-                self.score += 1
-                break
+        if self.game_state == 'game_run':
+            self.ball.move()
+            for brick in self.squares_list:
+                if brick.is_collision(self.ball):
+                    self.ball.reflect_y()
+                    self.squares_list.remove(brick)
+                    self.score += 1
+                    break
 
-        if self.platform.ball_collision_update(self.ball) == 'game_over':
-            self.game_over = True
+            if self.platform.ball_collision_update(self.ball) == 'game_over':
+                self.game_over = True
+                self.game_state = 'game_over'
+            if len(self.squares_list) == 0:
+                self.game_state = 'game_win'
 
-        if self.score == 48:
-            arcade.draw_text('YOU WIN!!!', SCREEN_HEIGHT / 20, SCREEN_WIDTH / 3, [119, 253, 1], 100)
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         self.platform.move_to(x)
