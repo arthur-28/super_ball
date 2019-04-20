@@ -7,9 +7,9 @@ SCREEN_HEIGHT = 600
 RADIUS = 10
 WIDTH_SQUARES = 50
 HEIGHT_SQUARES = 25
-ALPHA_MAX = 10
+MAX_A = 30
 
-bmp_background = arcade.load_texture('img/1 lvl.jpg')
+bmp_background = arcade.load_texture('img/4 lvl.jpg')
 bmp_platform = arcade.load_texture('img/platform1.png')
 bmp_ball = arcade.load_texture('img/ball.png')
 
@@ -27,7 +27,6 @@ class Platform:
                          self.color, 5)
         arcade.draw_texture_rectangle(self.x, self.y, self.width, 30, bmp_platform)
 
-
     def move_to(self, x):
         if self.width / 2 < x < SCREEN_WIDTH - self.width / 2:
             self.x = x
@@ -35,8 +34,12 @@ class Platform:
             pass
 
     def ball_collision_update(self, ball):
-        if self.x - self.width /2 < ball.x < self.x + self.width / 2 and self.y + ball.r  >= ball.y:
+        if self.x - self.width / 2 < ball.x < self.x + self.width / 2 and self.y + ball.r >= ball.y:
+            dx = self.x - ball.x
             ball.reflect_y()
+            # корректируем направление в зависимости от места столкновения с платформой
+            dAlpha = MAX_A * dx / (self.width * 0.5)
+            ball.correct_dir(dAlpha)
 
         if ball.y < 0:
             return 'game_over'
@@ -47,7 +50,7 @@ class Ball:
         self.x = SCREEN_WIDTH / 2
         self.y = RADIUS + 10
         self.speed = 10
-        self.dir = 160
+        self.dir = 90
         self.dx = cos(self.dir * pi / 180)
         self.dy = sin(self.dir * pi / 180)
         self.color = arcade.color.GRAY
@@ -67,6 +70,11 @@ class Ball:
 
     def reflect_y(self):
         self.dir *= -1
+        self.dx = cos(self.dir * pi / 180)
+        self.dy = sin(self.dir * pi / 180)
+
+    def correct_dir(self, change_dir=0):
+        self.dir += change_dir
         self.dx = cos(self.dir * pi / 180)
         self.dy = sin(self.dir * pi / 180)
 
