@@ -6,7 +6,7 @@ SCREEN_WIDTH = 1400
 SCREEN_HEIGHT = 800
 RADIUS = 10
 COUNT_SQUARES_X = 20
-COUNT_SQUARES_Y = 2
+COUNT_SQUARES_Y = 3
 
 WIDTH_SQUARES = SCREEN_WIDTH / COUNT_SQUARES_X
 HEIGHT_SQUARES = WIDTH_SQUARES / 2
@@ -64,6 +64,7 @@ class Platform:
 
         if ball.y < 0:
             return 'game_over'
+
 
 class Ball:
     def __init__(self):
@@ -151,7 +152,6 @@ class MyGame(arcade.Window):
         for i in range(COUNT_SQUARES_X):
             for j in range(COUNT_SQUARES_Y):
                 self.squares_list.append(Squares(i * WIDTH_SQUARES, HEIGHT_SQUARES * j + SCREEN_HEIGHT - HEIGHT_SQUARES * COUNT_SQUARES_Y))
-        pass
 
     def get_info(self):
         st = 'Score: {}\n\n'.format(self.score)
@@ -171,9 +171,11 @@ class MyGame(arcade.Window):
         self.ball.draw()
 
         if self.game_state == 'game_win':
-            arcade.draw_text('YOU WIN!!!', SCREEN_HEIGHT / 20, SCREEN_WIDTH / 3, [119, 253, 1], 100)
+            arcade.draw_text('YOU WIN!!!', SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, [119, 253, 1], 50,
+                             width=SCREEN_WIDTH, align="center", anchor_x="center", anchor_y="center")
+
         elif self.game_state == 'game_over':
-            arcade.draw_text('GAME OVER!!!', SCREEN_HEIGHT / 20, SCREEN_WIDTH / 3, [119, 253, 1], 100)
+            arcade.draw_text('GAME OVER!!!', SCREEN_HEIGHT / 2, SCREEN_WIDTH / 2, [119, 253, 1], 100)
 
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
@@ -192,19 +194,12 @@ class MyGame(arcade.Window):
             if len(self.squares_list) == 0:
                 self.game_state = 'game_win'
 
-
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         self.platform.move_to(x)
 
-    def on_key_press(self, key, modifiers):
-        if key == arcade.key.SPACE:
-            arcade.draw_texture_rectangle(, self.y, self.w, self.h, bmp_dragon)
-
-
-
 
 def main():
-    game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, 'SUPER BALL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, 'SUPER BALL')
     game.setup()
     arcade.run()
 
