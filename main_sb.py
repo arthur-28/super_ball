@@ -125,8 +125,9 @@ class Squares:
 
 class MyGame(arcade.Window):
     """ Главный класс приложения. """
-    def __init__(self, width, height):
-        super().__init__(width, height)
+    def __init__(self, width, height, title):
+        super().__init__(width, height, title)
+
         arcade.set_background_color(arcade.color.WHITE_SMOKE)
         self.set_mouse_visible(False)
         self.squares_list = []
@@ -157,7 +158,7 @@ class MyGame(arcade.Window):
         # Здесь код рисунка
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT,
                                       bmp_background)
-        arcade.draw_text(self.get_info(), 30, 30, [200, 0, 0], 18)
+        arcade.draw_text(self.get_info(), 30, 30, arcade.color.WHITE_SMOKE, 18)
 
         self.platform.draw()
         for square in self.squares_list:
@@ -192,7 +193,7 @@ class MyGame(arcade.Window):
 
 
 def main():
-    game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT)
+    game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, 'Super ball')
     game.setup()
     arcade.run()
 
