@@ -15,6 +15,8 @@ MAX_A = 30
 bmp_background = arcade.load_texture('img/1 lvl.jpg')
 bmp_platform = arcade.load_texture('img/platform1.png')
 bmp_ball = arcade.load_texture('img/ball.png')
+bmp_dragon = arcade.load_texture('img/dragon.jpg')
+bmp_squares = arcade.load_texture('img/obsidian.png')
 
 # from tkinter import *
 
@@ -194,9 +196,15 @@ class MyGame(arcade.Window):
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         self.platform.move_to(x)
 
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.SPACE:
+            arcade.draw_texture_rectangle(, self.y, self.w, self.h, bmp_dragon)
+
+
+
 
 def main():
-    game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, 'Super ball')
+    game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, 'SUPER BALL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
     game.setup()
     arcade.run()
 
