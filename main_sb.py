@@ -2,11 +2,14 @@ import arcade
 import random
 from math import sin, cos, pi
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1400
+SCREEN_HEIGHT = 800
 RADIUS = 10
-WIDTH_SQUARES = 50
-HEIGHT_SQUARES = 25
+COUNT_SQUARES_X = 20
+COUNT_SQUARES_Y = 2
+
+WIDTH_SQUARES = SCREEN_WIDTH / COUNT_SQUARES_X
+HEIGHT_SQUARES = WIDTH_SQUARES / 2
 MAX_A = 30
 
 bmp_background = arcade.load_texture('img/1 lvl.jpg')
@@ -106,8 +109,8 @@ class Ball:
 
 class Squares:
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
+        self.x = x + WIDTH_SQUARES / 2
+        self.y = y + HEIGHT_SQUARES / 2
         self.w = WIDTH_SQUARES
         self.h = HEIGHT_SQUARES
         self.color = [119, 253, 1]
@@ -143,9 +146,9 @@ class MyGame(arcade.Window):
         self.platform = Platform()
         self.ball = Ball()
         print(self.platform.width)
-        for i in range(16):
-            for j in range(3):
-                self.squares_list.append(Squares(i * 50 + 20, j * 25 + 537))
+        for i in range(COUNT_SQUARES_X):
+            for j in range(COUNT_SQUARES_Y):
+                self.squares_list.append(Squares(i * WIDTH_SQUARES, HEIGHT_SQUARES * j + SCREEN_HEIGHT - HEIGHT_SQUARES * COUNT_SQUARES_Y))
         pass
 
     def get_info(self):
