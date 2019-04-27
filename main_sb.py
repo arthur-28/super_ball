@@ -15,8 +15,7 @@ MAX_A = 30
 bmp_background = arcade.load_texture('img/1 lvl.jpg')
 bmp_platform = arcade.load_texture('img/platform1.png')
 bmp_ball = arcade.load_texture('img/ball.png')
-bmp_dragon = arcade.load_texture('img/dragon.jpg')
-bmp_squares = arcade.load_texture('img/obsidian.png')
+# bmp_squares = arcade.load_texture('img/obsidian.png')
 
 # from tkinter import *
 
@@ -109,7 +108,6 @@ class Ball:
         arcade.draw_circle_filled(self.x, self.y, self.r, self.color)
         arcade.draw_texture_rectangle(self.x, self.y, self.r * 6, self.r * 6, bmp_ball)
 
-
 class Squares:
     def __init__(self, x, y):
         self.x = x + WIDTH_SQUARES / 2
@@ -119,7 +117,8 @@ class Squares:
         self.color = [119, 253, 1]
 
     def draw(self):
-        arcade.draw_rectangle_filled(self.x, self.y, self.w - 5, self.h - 5, self.color)
+        arcade.draw_rectangle_filled(self.x, self.y, self.w - 5, self.h - 5, arcade.color.GREEN)
+        # arcade.draw_texture_rectangle(self.x, self.y, self.w - 5, self.h - 5, bmp_squares)
 
     def is_collision(self, ball):
         if (abs(ball.y - self.y) <= self.h / 2 + ball.r) \
