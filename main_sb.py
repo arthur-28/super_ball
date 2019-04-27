@@ -1,36 +1,20 @@
 import arcade
-import random
 from math import sin, cos, pi
 
 SCREEN_WIDTH = 1400
 SCREEN_HEIGHT = 800
 RADIUS = 10
-COUNT_SQUARES_X = 20
+COUNT_SQUARES_X = 22
 COUNT_SQUARES_Y = 3
 
 WIDTH_SQUARES = SCREEN_WIDTH / COUNT_SQUARES_X
 HEIGHT_SQUARES = WIDTH_SQUARES / 2
 MAX_A = 30
+TIME_TO_GAME = 150.0
 
 bmp_background = arcade.load_texture('img/1 lvl.jpg')
-bmp_platform = arcade.load_texture('img/platform1.png')
+bmp_platform = arcade.load_texture('img/platform.png')
 bmp_ball = arcade.load_texture('img/ball.png')
-# bmp_squares = arcade.load_texture('img/obsidian.png')
-
-# from tkinter import *
-
-# root = Tk()
-# root.title("GUI на Python")
-# root.geometry("800x600")
-
-# main_menu = Menu()
-# main_menu.add_cascade(label="File")
-# main_menu.add_cascade(label="Edit")
-# main_menu.add_cascade(label="View")
-#
-# root.config(menu=main_menu)
-# root.mainloop()
-
 
 class Platform:
     def __init__(self):
@@ -118,7 +102,6 @@ class Squares:
 
     def draw(self):
         arcade.draw_rectangle_filled(self.x, self.y, self.w - 5, self.h - 5, arcade.color.GREEN)
-        # arcade.draw_texture_rectangle(self.x, self.y, self.w - 5, self.h - 5, bmp_squares)
 
     def is_collision(self, ball):
         if (abs(ball.y - self.y) <= self.h / 2 + ball.r) \
@@ -132,6 +115,7 @@ class MyGame(arcade.Window):
     """ Главный класс приложения. """
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
+        self.total_time = TIME_TO_GAME
 
         arcade.set_background_color(arcade.color.WHITE_SMOKE)
         self.set_mouse_visible(False)
@@ -144,6 +128,7 @@ class MyGame(arcade.Window):
         self.game_over = False
         #  'game_run', 'game_win', 'game_over'
         self.game_state = 'game_run'
+        self.total_time = TIME_TO_GAME
 
         self.platform = Platform()
         self.ball = Ball()
@@ -153,28 +138,40 @@ class MyGame(arcade.Window):
                 self.squares_list.append(Squares(i * WIDTH_SQUARES, HEIGHT_SQUARES * j + SCREEN_HEIGHT - HEIGHT_SQUARES * COUNT_SQUARES_Y))
 
     def get_info(self):
-        st = 'Score: {}\n\n'.format(self.score)
+        st = ' Score: {}\n\n'.format(self.score)
         return st
 
     def on_draw(self):
         """ Отрендерить этот экран. """
         arcade.start_render()
         # Здесь код рисунка
+        minutes = int(self.total_time) // 60
+        seconds = int(self.total_time) % 60
+
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT,
                                       bmp_background)
         arcade.draw_text(self.get_info(), 30, 30, arcade.color.WHITE_SMOKE, 18)
+        output = f"Time: {minutes:02d}:{seconds:02d}"
+        arcade.draw_text(output, 35, 35, arcade.color.WHITE, 18)
 
         self.platform.draw()
         for square in self.squares_list:
             square.draw()
         self.ball.draw()
 
+        if self.total_time == 0.0:
+            arcade.draw_text('GAME OVER!!!', SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.RED_DEVIL, 50,
+                             width=SCREEN_WIDTH, align="center", anchor_x="center", anchor_y="center")
+
         if self.game_state == 'game_win':
-            arcade.draw_text('YOU WIN!!!', SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, [119, 253, 1], 50,
+            arcade.draw_text('YOU WIN!!!', SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.ANDROID_GREEN, 50,
                              width=SCREEN_WIDTH, align="center", anchor_x="center", anchor_y="center")
 
         elif self.game_state == 'game_over':
-            arcade.draw_text('GAME OVER!!!', SCREEN_HEIGHT / 2, SCREEN_WIDTH / 2, [119, 253, 1], 100)
+            arcade.draw_text('GAME OVER!!!', SCREEN_WIDTH / 2,  SCREEN_HEIGHT / 2, arcade.color.RED_DEVIL, 50,
+                             width=SCREEN_WIDTH, align="center", anchor_x="center", anchor_y="center")
+
+
 
     def update(self, delta_time):
         """ Здесь вся игровая логика и логика перемещения."""
@@ -193,9 +190,23 @@ class MyGame(arcade.Window):
             if len(self.squares_list) == 0:
                 self.game_state = 'game_win'
 
+            if self.total_time > 0.0:
+                self.total_time -= delta_time
+            else:
+                self.game_state = 'game_over'
+
+
+
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         self.platform.move_to(x)
 
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.BACKSPACE:
+            self.squares_list.clear()
+            self.score = COUNT_SQUARES_Y * COUNT_SQUARES_X
+
+        if key == arcade.key.TAB:
+            self.total_time = 10000
 
 def main():
     game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, 'SUPER BALL')
